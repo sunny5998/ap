@@ -1,0 +1,9 @@
+clc;
+close all;
+clear all;
+
+P = 5;
+N = 5;
+
+Ec = (0-(P/(P+N))* log(P/(P+N))/log(2) )- ((N/(P+N))* log(N/(P+N))/log(2))
+

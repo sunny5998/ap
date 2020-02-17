@@ -1,0 +1,139 @@
+clc;
+close all;
+clear all;
+
+age=input('age(old-0 mid-1 new-2)');
+comp=input('Competition(Yes-0 No-1)');
+type=input('Type(S/W-0 H/W-1)');
+prof=input('Profit(Down-0 Up-1)');
+
+N=size(age,2);
+
+for i=1:N
+    Ndown=size(find(prof),2);
+end
+buff=0;
+Nup=N-Ndown;
+E=-(Ndown/N)*log2(Ndown/N)-(Nup/N)*log2(Nup/N);
+%Considering Age attribute
+
+buff=find(age==0);
+Nage_old=size(buff,2);
+Ndown=0;
+for i=1:size(buff,2)
+    if(prof(buff(i))==0)
+        Ndown=Ndown+1;
+    end
+end
+if(Ndown==Nage_old || Ndown==0)
+    Eage_old=0;
+else
+    Eage_old=-(Ndown/size(buff,2))*log2(Ndown/size(buff,2))-(1-Ndown/size(buff,2))*log2(1-Ndown/size(buff,2));
+end
+buff=find(age==1);
+Nage_mid=size(buff,2);
+Ndown=0;
+for i=1:size(buff,2)
+    if(prof(buff(i))==0)
+        Ndown=Ndown+1;
+    end
+end
+if(Ndown==Nage_mid || Ndown==0)
+    Eage_mid=0;
+else
+    Eage_mid=-(Ndown/size(buff,2))*log2(Ndown/size(buff,2))-(1-Ndown/size(buff,2))*log2(1-Ndown/size(buff,2));
+end
+
+buff=find(age==2);
+Nage_new=size(buff,2);
+Ndown=0;
+for i=1:size(buff,2)
+    if(prof(buff(i))==0)
+        Ndown=Ndown+1;
+    end
+end
+if(Ndown==Nage_new || Ndown==0)
+    Eage_new=0;
+else
+    Eage_new=-(Ndown/size(buff,2))*log2(Ndown/size(buff,2))-(1-Ndown/size(buff,2))*log2(1-Ndown/size(buff,2));
+end
+%calculating informaion & gain
+Iage=(Eage_old*Nage_old+Eage_mid*Nage_mid+Eage_new*Nage_new)/N;
+Gage=E-Iage;
+
+%Considering Competition attribute
+
+buff=find(comp==0);
+Ncomp_yes=size(buff,2);
+Ndown=0;
+for i=1:size(buff,2)
+    if(prof(buff(i))==0)
+        Ndown=Ndown+1;
+    end
+end
+if(Ndown==Ncomp_yes || Ndown==0)
+    Ecomp_yes=0;
+else
+    Ecomp_yes=-(Ndown/size(buff,2))*log2(Ndown/size(buff,2))-(1-Ndown/size(buff,2))*log2(1-Ndown/size(buff,2));
+end
+
+buff=find(comp==1);
+Ncomp_no=size(buff,2);
+Ndown=0;
+for i=1:size(buff,2)
+    if(prof(buff(i))==0)
+        Ndown=Ndown+1;
+    end
+end
+if(Ndown==Ncomp_no || Ndown==0)
+    Ecomp_no=0;
+else
+    Ecomp_no=-(Ndown/size(buff,2))*log2(Ndown/size(buff,2))-(1-Ndown/size(buff,2))*log2(1-Ndown/size(buff,2));
+end
+
+%calculating informaion & gain
+Icomp=(Ecomp_yes*Ncomp_yes+Ecomp_no*Ncomp_no)/N;
+Gcomp=E-Icomp;
+
+%Considering Type attribute
+
+buff=find(type==0);
+Ntype_s=size(buff,2);
+Ndown=0;
+for i=1:size(buff,2)
+    if(prof(buff(i))==0)
+        Ndown=Ndown+1;
+    end
+end
+if(Ndown==Ntype_s || Ndown==0)
+    Etype_s=0;
+else
+    Etype_s=-(Ndown/size(buff,2))*log2(Ndown/size(buff,2))-(1-Ndown/size(buff,2))*log2(1-Ndown/size(buff,2));
+end
+
+buff=find(type==1);
+Ntype_h=size(buff,2);
+Ndown=0;
+for i=1:size(buff,2)
+    if(prof(buff(i))==0)
+        Ndown=Ndown+1;
+    end
+end
+if(Ndown==Ntype_h || Ndown==0)
+    Etype_h=0;
+else
+    Etype_h=-(Ndown/size(buff,2))*log2(Ndown/size(buff,2))-(1-Ndown/size(buff,2))*log2(1-Ndown/size(buff,2));
+end
+
+%calculating informaion & gain
+Itype=(Etype_s*Ntype_s+Etype_h*Ntype_h)/N;
+Gtype=E-Itype;
+
+if(Gage>Gtype & Gage>Gtype)
+    disp('Age is root node');
+else if (Gcomp>Gtype & Gcomp>Gage)
+    disp('Competition is root node');
+else
+    disp('Type is root node');
+    end
+end
